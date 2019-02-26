@@ -7,7 +7,6 @@ var fs = require('fs'),
     style = require('../lib/style.js');
 
 module.exports = function(req, res, next) {
-  req.gr.addAll();
   req.gr.dirUnique();
   req.gr.directories.forEach(function(dir) {
     var cwd = dir.replace(new RegExp('^' + req.gr.homePath + '/'), '~/');

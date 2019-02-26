@@ -133,7 +133,7 @@ Gr.prototype.parseTargets = function(argv) {
 
   if (processed === 0) {
     // default to using all paths
-    this.addAll();
+    this.addDefault();
   }
 
   // unique, non-empty only
@@ -262,17 +262,20 @@ Gr.prototype.getTagsByPath = function(cwd) {
   return tags;
 };
 
-Gr.prototype.addAll = function() {
-  var self = this;
-  if (this.config && this.config.items && this.config.items.tags) {
-    Object.keys(this.config.items.tags).forEach(function(tag) {
-      if (Array.isArray(self.config.items.tags[tag])) {
-        self.config.items.tags[tag].forEach(function(dirname) {
-          self.directories.push(dirname);
-        });
-      }
-    });
+Gr.prototype.addDefault = function() {
+  if (!this.config || !this.config.items || !this.config.items.tags) {
+    return;
   }
+
+  var defaultTags = this.config.items.defaultTags || Object.keys(this.config.items.tags);
+
+  defaultTags.forEach(tag => {
+    if (Array.isArray(this.config.items.tags[tag])) {
+      this.config.items.tags[tag].forEach(dirname => {
+        this.directories.push(dirname);
+      });
+    }
+  });
 };
 
 Gr.prototype.dirUnique = function() {
